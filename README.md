@@ -11,13 +11,15 @@
 * **Docker & Docker Compose**
 
 ## 🏗️ Структура проекта
+```
 ├── main.py           # Точка входа и Lifespan (startup)
 ├── database.py       # Настройка Async SQLAlchemy & Engine
-├── models.py         # Описание таблиц БД
+├── models.py         # SQLAlchemy модели (ORM)
 ├── schemas.py        # Валидация данных Pydantic
 └── routers/          # Разделение логики по модулям
     ├── categories.py
     └── transactions.py
+```
 
 ## ⚡ Быстрый старт (Docker)
 1. Клонируйте репозиторий:
