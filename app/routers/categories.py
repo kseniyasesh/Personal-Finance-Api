@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from database import get_db
-import models, schemas
+from app.database import get_db
+import app.models as models, app.schemas as schemas
 
 router = APIRouter(prefix="/categories", tags=["Categories"])
 

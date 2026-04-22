@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from database import Base
+from app.database import Base
 
 class Category(Base):
     __tablename__ = "categories"
@@ -32,3 +32,9 @@ class Transaction(Base):
         lazy="joined"
     )
 
+class Budget(Base):
+    __tablename__ = "budgets"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+    amount: Mapped[int] = mapped_column()  # Лимит в копейках
