@@ -6,6 +6,8 @@ from app.routers import transactions
 from app.routers import reports
 from fastapi import Security, HTTPException, status
 from fastapi.security.api_key import APIKeyHeader
+from datetime import timedelta
+from app.security import create_token
 
 API_KEY = "super-secret-key"
 api_key_header = APIKeyHeader(name="X-API-Key")
@@ -27,7 +29,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# ПОДКЛЮЧАЕМ РОУТЕРЫ
 app.include_router(categories.router)
 app.include_router(transactions.router)
 app.include_router(reports.router)
@@ -35,3 +36,20 @@ app.include_router(reports.router)
 @app.get("/")
 async def root():
     return {"message": "Finance API is working", "docs": "/docs"}
+
+@app.post("/auth/login")
+async def login():
+    access_token = create_token(
+        data={"sub": "user@example.com"}, 
+        expires_delta=timedelta(minutes=30)
+    )
+    refresh_token = create_token(
+        data={"sub": "user@example.com"}, 
+        expires_delta=timedelta(days=7) 
+    )
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer"
+    }
+
