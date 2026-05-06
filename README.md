@@ -1,10 +1,10 @@
 # 💰 Personal Finance API
 
-REST API для учета личных финансов на FastAPI с PostgreSQL.
+REST API for personal finance tracking built with FastAPI and PostgreSQL.
 
-> Проект реализован в рамках практического трека на платформе [Solvit](https://solvit.space/projects/personal_finance_tracker)
+> This project was implemented as part of a practical track on the [Solvit](https://solvit.space/projects/personal_finance_tracker) platform.
 
-## Стек технологий
+## Tech Stack
 
 - Python 3.12
 - FastAPI
@@ -12,95 +12,95 @@ REST API для учета личных финансов на FastAPI с Postgre
 - SQLAlchemy 2.0 (async)
 - Alembic
 - Pydantic V2
-- JWT аутентификация
+- JWT Authentication
 - Docker & Nginx
 
-## Структура проекта
+## Project Structure
 
 ```
 app/
-├── main.py           # Точка входа и конфигурация
-├── database.py       # Подключение к БД и сессии
-├── models.py         # SQLAlchemy модели
-├── schemas.py        # Pydantic схемы
-├── security.py       # JWT, хеширование и токены
-└── routers/          # Роутеры по модулям
-    ├── categories.py # Категории
-    ├── transactions.py # Транзакции (ACID, Фильтры)
-    └── reports.py    # Аналитика и отчеты
-migrations/           # История миграций базы данных
-tests/                # Автоматические тесты (Pytest)
+├── main.py               # Entry point and configuration
+├── database.py           # DB connection and session management
+├── models.py             # SQLAlchemy models
+├── schemas.py            # Pydantic schemas
+├── security.py           # JWT, hashing, and tokens
+└── routers/              # Module-based routers
+    ├── categories.py     # Categories
+    ├── transactions.py   # Transactions (ACID, Filters)
+    └── reports.py        # Analytics and reports
+migrations/               # Database migration history
+tests/                    # Automated tests (Pytest)
 ```
 
-## Быстрый старт
+## Quick Start
 
-### С Docker (рекомендуется)
+### With Docker (Recommended)
 
 ```bash
-# Клонировать репозиторий
+# Clone the repository
 git clone https://github.com
 cd Personal-Finance-Api
 
-# Создать .env файл
+# Create .env file
 cp .env.example .env
 
-# Запустить контейнеры
+# Start containers
 docker-compose up --build -d
 
-# Применить миграции
+# Apply migrations
 docker-compose exec app alembic upgrade head
 ```
 
-API будет доступен по адресу: http://localhost:8000
+The API will be available at: http://localhost:8000
 Swagger UI: http://localhost:8000/docs
 
-### Локально (без Docker)
+### Locally (Without Docker)
 
 ```bash
-# Создать виртуальное окружение
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate
 
-# Установить зависимости
+# Install dependencies
 pip install -r requirements.txt
 
-# Применить миграции
+# Apply migrations
 alembic upgrade head
 
-# Запустить сервер
+# Start server
 uvicorn app.main:app --reload
 ```
 
 ## API Endpoints
 
-### Аутентификация
+### Authentication
 
 
-| Метод | Endpoint | Описание |
+| Method | Endpoint | Description |
 |-------|----------|----------|
-| POST | /auth/login | Вход (получение Access и Refresh токенов) |
+| POST | /auth/login | Login (Obtain Access and Refresh tokens) |
 
-### Транзакции
+### Transactions
 
 
-| Метод | Endpoint | Описание | Доступ |
+| Method | Endpoint | Description | Access |
 |-------|----------|----------|--------|
-| GET | /transactions/ | Список операций (пагинация, фильтры) | Все |
-| POST | /transactions/ | Добавить операцию (защита ACID) | Все |
-| GET | /transactions/report | Быстрый отчет по категориям | Все |
+| GET | /transactions/ | List of operations (pagination, filters) | All |
+| POST | /transactions/ | Add an operation (ACID protection) | All |
+| GET | /transactions/report | Quick report by categories | All |
 
-### Аналитика (Reports)
+### Analytics (Reports)
 
 
-| Метод | Endpoint | Описание |
+| Method | Endpoint | Description |
 |-------|----------|----------|
-| GET | /reports/categories | Суммарные траты по категориям |
-| GET | /reports/timeseries | Динамика расходов по дням |
-| GET | /reports/budgets/progress | Состояние лимитов бюджетов |
+| GET | /reports/categories | Summary of spending by category |
+| GET | /reports/timeseries | Expense dynamics by day |
+| GET | /reports/budgets/progress | Budget limit status |
 
-## Примеры запросов
+## Usage Examples
 
-### Вход
+### Login
 
 ```bash
 curl -X POST http://localhost:8000/auth/login \
@@ -108,7 +108,7 @@ curl -X POST http://localhost:8000/auth/login \
   -d '{"username": "user1", "password": "password123"}'
 ```
 
-### Создание транзакции (с API Key)
+### Create Transaction (with API Key)
 
 ```bash
 curl -X POST http://localhost:8000/transactions/ \
@@ -117,29 +117,29 @@ curl -X POST http://localhost:8000/transactions/ \
   -d '{"amount": 5000, "category_id": 1, "type": "expense", "description": "Coffee"}'
 ```
 
-## Тестирование
+## Testing
 
 ```bash
-# Запустить тесты внутри контейнера
+# Run tests inside the container
 docker-compose exec app pytest
 ```
 
-## Переменные окружения
+## Environment Variables
 
 
-| Переменная | Описание | По умолчанию |
+| Variable | Description | Default |
 |------------|----------|--------------|
-| DATABASE_URL | URL подключения к PostgreSQL | postgresql+asyncpg://postgres:mysecretpassword@db:5432/finance_db |
-| SECRET_KEY | Секретный ключ для JWT | super-secret-key |
-| ALGORITHM | Алгоритм JWT | HS256 |
-| API_KEY | Ключ доступа для API | super-secret-key |
+| DATABASE_URL | PostgreSQL connection URL | postgresql+asyncpg://postgres:mysecretpassword@db:5432/finance_db |
+| SECRET_KEY | Secret key for JWT | super-secret-key |
+| ALGORITHM | JWT algorithm | HS256 |
+| API_KEY | Access key for the API | super-secret-key |
 
-## Миграции
+## Migrations
 
 ```bash
-# Создать новую миграцию
+# Create a new migration
 docker-compose exec app alembic revision --autogenerate -m "description"
 
-# Применить миграции
+# Apply migrations
 docker-compose exec app alembic upgrade head
 ```
